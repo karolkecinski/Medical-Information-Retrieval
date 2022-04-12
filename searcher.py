@@ -1,5 +1,7 @@
 # import the necessary packages
 import csv
+from distutils.log import error
+from logging import exception
 import math
 import numpy as np
 from numpy.core import sqrt, add
@@ -142,7 +144,7 @@ class Searcher:
         x : string
             Path to the index file.
         """
-        pass
+        self.path_to_index = path_to_index
 
         
         
@@ -170,4 +172,21 @@ class Searcher:
             - Sort the results according their distance
             - Return limited results
         """
-        pass
+        if not Path(self.path_to_index).exists():
+            print("Error")
+            return False
+        
+        distances = {}
+        
+        with open(self.path_to_index) as file:
+            data = csv.reader(file)
+            for row in data.:
+                filename = row[0]
+                features = []
+                for val in row[1:]:
+                    features.append(float(val))
+
+                distances.update(filename, euclidean_distance(query_features, features))
+
+        result = dict(sorted(distances.items(), key = lambda x: x[1]))
+        return result

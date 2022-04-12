@@ -119,5 +119,5 @@ def preprocessing_main(image_directory, output_path, file_extensions = (".png", 
 if __name__ == '__main__':
     #x = get_images_paths('ImageCLEFmed2007_test/', ['.png'])
     #print(x)
-    preprocessing_main(image_directory = "ImageCLEFmed2007_test/", output_path="output/out.txt")
+    preprocessing_main(image_directory = "ImageCLEFmed2007_test/", output_path="output/out.csv")
     # preprocessing_main(image_directory = "static/images/database/", output_path="static/")
