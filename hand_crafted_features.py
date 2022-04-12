@@ -80,7 +80,13 @@ class hand_crafted_features:
             - Return a list (flatten)
         """
 
-        return cv2.resize(image, (30, 30))
+        features = cv2.resize(image, (30, 30))
+        # cast image to list of lists
+        features =  features.tolist()
+        # flatten the list of lists
+        features = [item for sublist in features for item in sublist]
+        
+        return features
 
 
     def partitionbased_histograms(self, image, factor = 10):

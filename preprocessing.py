@@ -1,9 +1,11 @@
+from venv import create
 import cv2
 from hand_crafted_features import hand_crafted_features
 # from ae import auto_encoder
 import numpy as np
 import glob
 import sys
+import os
 
 def get_images_paths(image_directory, file_extensions):
     """
@@ -32,7 +34,8 @@ def get_images_paths(image_directory, file_extensions):
 
     for extension in file_extensions:
         directory = image_directory + '*' + extension
-        listOfDirectories.append(glob.glob(directory))
+        listOfDirectories.extend(glob.glob(directory))
+    #print(listOfDirectories)
     return listOfDirectories
 
 
@@ -61,12 +64,9 @@ def create_feature_list(image_paths):
     featureLists = []
     print(image_paths)
 
-    for image in image_paths:
-        #print(image)
-        file = open(image)
-        content = file.read()
-        featureLists.append(HCF.extract(content))
-        file.close()
+    for path in image_paths:
+        image = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+        featureLists.append(HCF.extract(image))
 
     return featureLists
 
@@ -93,17 +93,14 @@ def write_to_file(feature_list, image_paths, output_path):
         - Information about files http://www.tutorialspoint.com/python/file_write.htm 
     """
 
-    file = open(output_path)
-    output = []
+    with open(output_path, 'w+') as file:
 
-    for image_features, image_path in zip(feature_list, image_paths): 
-        output.append(image_path + ',')
-        for feature in image_features:
-            output.append(','.join(feature))
-        file.write(output)
-        file.write("\n")
-
-    file.close()
+        for image_features, image_path in zip(feature_list, image_paths): 
+            output = f'{image_path}'
+            for feature in image_features:
+                output += ',' + str(feature)
+            output += '\n'
+            file.write(output)
     
 
 
@@ -122,5 +119,5 @@ def preprocessing_main(image_directory, output_path, file_extensions = (".png", 
 if __name__ == '__main__':
     #x = get_images_paths('ImageCLEFmed2007_test/', ['.png'])
     #print(x)
-    preprocessing_main(image_directory = "ImageCLEFmed2007_test/", output_path="static/")
+    preprocessing_main(image_directory = "ImageCLEFmed2007_test/", output_path="output/out.txt")
     # preprocessing_main(image_directory = "static/images/database/", output_path="static/")
