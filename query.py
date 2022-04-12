@@ -16,7 +16,9 @@ class Query:
         path_to_index : string
             Path to the index file.
         """
-        pass
+        self.path_to_index = path_to_index
+        self.query_image_name = None
+        self.results = None
 
 
     def set_image_name(self, query_image_name):
@@ -35,7 +37,11 @@ class Query:
                 - Read in the image and save it under 'self.query_image'
                 - Calculate features
         """
-        pass
+        if(query_image_name != self.query_image_name):
+            self.results = None
+            self.query_image_name = query_image_name
+            #TODO self.query_image
+            self.calculate_features()
 
     def calculate_features(self):
         """

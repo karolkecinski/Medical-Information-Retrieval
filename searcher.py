@@ -18,7 +18,11 @@ def square_rooted(x):
     square rooted : float
         Root of the sum of all squared elements of 'x'.
     """
-    pass
+
+    sum = 0
+    for xi in x:
+        sum += xi ** 2
+    return sqrt(sum)
 
 def euclidean_distance(x, y):
     """
@@ -37,7 +41,13 @@ def euclidean_distance(x, y):
     -------
     https://pythonprogramming.net/euclidean-distance-machine-learning-tutorial/
     """
-    pass
+
+    sum = 0
+    for xi, yi in zip(x, y):
+        squareDiff = (xi - yi) ** 2
+        sum += squareDiff 
+
+    return sqrt(sum)
 
 def manhattan_distance(self, x, y):
     """
@@ -53,7 +63,11 @@ def manhattan_distance(self, x, y):
     manhattan distance : float
         The manhattan distance between vectors `x` and `y`.
     """
-    pass
+
+    sum = 0
+    for xi, yi in zip(x, y):
+        sum += abs(xi - yi)
+    return sum
 
 def minkowski_distance(self, x, y, p):
     """
@@ -71,7 +85,11 @@ def minkowski_distance(self, x, y, p):
     minkowski distance : float
         The minkowski distance between vectors `x` and `y`.
     """
-    pass
+
+    sum = 0
+    for xi, yi in zip(x, y):
+        sum += abs(xi - yi) ** p
+    return sum ** (1/p)
 
 def cosine_similarity(self, x, y):
     """
