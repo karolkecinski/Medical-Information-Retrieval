@@ -180,7 +180,7 @@ class Searcher:
         
         with open(self.path_to_index) as file:
             data = csv.reader(file)
-            for row in data.:
+            for row in data:
                 filename = row[0]
                 features = []
                 for val in row[1:]:
