@@ -63,9 +63,8 @@ class IRMA:
         C = csv_to_dict(dir_path + "C.csv")
         D = csv_to_dict(dir_path + "D.csv")
 
-        dict_list = [A, B, C, D]
+        dict_list       = [A, B, C, D]
         self.IRMA_codes = dict_list
-
         self.image_dict = csv_to_dict(dir_path + "image_codes.csv")
 
 
@@ -89,12 +88,15 @@ class IRMA:
         - Use self.image_dict to convert names to codes. ('None' if no associated code can be found)
         - Return the list of codes
         """
-        images = []
+        irma_codes = []
 
         for imageName in image_names:
-            basename = os.path.basename(imageName)
+            basename    = os.path.basename(imageName)
             noExtension = Path(basename).stem
-            images.append(noExtension)
+            irma_code   = self.image_dict.get(noExtension)
+            irma_codes.append(irma_code)
+
+        return irma_codes
 
     def decode_as_dict(self, code):
         """
