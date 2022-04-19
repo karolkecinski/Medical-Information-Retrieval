@@ -1,6 +1,8 @@
+#from ast import pattern
 import csv
 import os
 from pathlib import Path
+import string
 
 def csv_to_dict(file_path):
     """
@@ -26,9 +28,11 @@ def csv_to_dict(file_path):
     csv_dict = {}
 
     with open(file_path) as file:
-        data = csv.reader(file)
+        data = csv.reader(file, delimiter = ';')
         for row in data:
-            csv_dict.update({row[0]: row[1]})
+            if any(x.strip() for x in row):
+                #print(row)
+                csv_dict.update({row[0]: row[1]})
 
     return csv_dict
     
@@ -40,7 +44,7 @@ class IRMA:
     labels_long = ["Technical code for imaging modality", "Directional code for imaging orientation", "Anatomical code for body region examined", "Biological code for system examined"]
     labels_short = ["Imaging modality", "Imaging orientation", "Body region", "System"]
 
-    def __init__(self, dir_path= "irma_data/"):
+    def __init__(self, dir_path= "irma_data" + os.sep):
         """
         Constructor of an IRMA element.
 
@@ -98,7 +102,7 @@ class IRMA:
 
         return irma_codes
 
-    def decode_as_dict(self, code):
+    def decode_as_dict(self, code: string):
         """
         Function to decode an irma code to a dict.
 
@@ -117,7 +121,21 @@ class IRMA:
         - Possible solution: {'Imaging modality': ['x-ray', 'plain radiography', 'analog', 'overview image'], ...}
         - Solution can look different
         """
-        pass
+
+        decoded = {}
+        
+        separated = code.split("-")
+        for i in range(4): # for each feature X in A-B-C-D
+            labels_list = []
+            for j in range(len(separated[i])):
+                str = separated[i][:j+1]
+                feature = self.IRMA_codes[i].get(str)
+                labels_list.append(feature)
+                if separated[i][j] == '0':
+                    break
+            decoded.update({self.labels_short[i]: labels_list})
+
+        return decoded
 
     def decode_as_str(self, code):
         """
@@ -139,7 +157,23 @@ class IRMA:
         - Possible solution: ['Imaging modality: x-ray, plain radiography, analog, overview image', 'Imaging orientation: coronal, anteroposterior (AP, coronal), supine', 'Body region: abdomen, unspecified', 'System: uropoietic system, unspecified']
         - Solution can look different -> FLASK will use this representation to visualize the information on the webpage.
         """
-        pass
+        decoded = []
+        
+        separated = code.split("-")
+        for i in range(4):
+            labels_list = []
+            for j in range(len(separated[i])):
+                str = separated[i][:j+1]
+                feature = self.IRMA_codes[i].get(str)
+                labels_list.append(feature)
+                if separated[i][j] == '0':
+                    break
+            labels = ''
+            labels = ', '.join(labels_list)
+            decoded.append(f'{self.labels_short[i]}: {labels}')
+
+        return decoded
+        
 
 if __name__ == '__main__':
     image_names = ["1880.png"]
