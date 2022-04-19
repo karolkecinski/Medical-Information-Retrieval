@@ -1,5 +1,6 @@
 import csv
 import os
+from pathlib import Path
 
 def csv_to_dict(file_path):
     """
@@ -21,7 +22,16 @@ def csv_to_dict(file_path):
     - For each row, add an entry to a dict (first column is key, second column is value)
     - Return the dict
     """
-    pass
+    
+    csv_dict = {}
+
+    with open(file_path) as file:
+        data = csv.reader(file)
+        for row in data:
+            csv_dict.update({row[0]: row[1]})
+
+    return csv_dict
+    
     
 class IRMA:
     """
@@ -45,7 +55,18 @@ class IRMA:
         - Save the dicts (list) as class variable
         - Save "image_codes.csv" as dict in a class variable
         """
-        pass
+        
+        self.irma_data = dir_path
+
+        A = csv_to_dict(dir_path + "A.csv")
+        B = csv_to_dict(dir_path + "B.csv")
+        C = csv_to_dict(dir_path + "C.csv")
+        D = csv_to_dict(dir_path + "D.csv")
+
+        dict_list = [A, B, C, D]
+        self.IRMA_codes = dict_list
+
+        self.image_dict = csv_to_dict(dir_path + "image_codes.csv")
 
 
     def get_irma(self, image_names):
@@ -68,7 +89,12 @@ class IRMA:
         - Use self.image_dict to convert names to codes. ('None' if no associated code can be found)
         - Return the list of codes
         """
-        pass
+        images = []
+
+        for imageName in image_names:
+            basename = os.path.basename(imageName)
+            noExtension = Path(basename).stem
+            images.append(noExtension)
 
     def decode_as_dict(self, code):
         """
