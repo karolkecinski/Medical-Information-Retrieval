@@ -43,6 +43,7 @@ class Query:
             self.query_image = cv2.imread(query_image_name, cv2.IMREAD_GRAYSCALE)
             self.calculate_features()
 
+
     def calculate_features(self):
         """
         Function to calculate features for the query image.
@@ -56,6 +57,7 @@ class Query:
 
         # describe the image
         self.features = feature_extractor.extract(self.query_image)
+
  
     def run(self, limit = 10):
         """
@@ -81,12 +83,12 @@ class Query:
             sr = Searcher(self.query_image_name)
             results = sr.search(self.features)
             self.results = results
-            limited = results.items()[:10]
+            limited = results.items()[:limit]
             return limited
 
 
 if __name__ == "__main__":
-    query = Query(path_to_index= "output/output.csv")
-    query.set_image_name(query_image_name="ImageCLEFmed2007_test/3236.png")
+    query = Query(path_to_index= "output/out.csv")
+    query.set_image_name(query_image_name="Practical Exercise I/ImageCLEFmed2007_test/3236.png")
     query_result = query.run()
     print("Retrieved images: ", query_result)

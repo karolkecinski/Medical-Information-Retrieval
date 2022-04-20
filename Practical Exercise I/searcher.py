@@ -178,7 +178,7 @@ class Searcher:
         
         distances = {}
         
-        with open(self.path_to_index) as file:
+        with open(self.path_to_index, encoding = 'cp850') as file:
             data = csv.reader(file)
             for row in data:
                 filename = row[0]
