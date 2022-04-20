@@ -88,7 +88,7 @@ class Query:
 
 
 if __name__ == "__main__":
-    query = Query(path_to_index= "output/out.csv")
+    query = Query(path_to_index= "Practical Exercise I/output/out.csv")
     query.set_image_name(query_image_name="Practical Exercise I/ImageCLEFmed2007_test/3236.png")
     query_result = query.run()
     print("Retrieved images: ", query_result)

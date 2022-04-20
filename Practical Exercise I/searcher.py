@@ -178,8 +178,9 @@ class Searcher:
         
         distances = {}
         
-        with open(self.path_to_index, encoding = 'cp850') as file:
+        with open(self.path_to_index, encoding = 'UTF-8') as file:
             data = csv.reader(file)
+            print(data)
             for row in data:
                 filename = row[0]
                 features = []
