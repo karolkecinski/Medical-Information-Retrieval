@@ -80,15 +80,16 @@ class Query:
             - Return the 'limit' first elements of the 'results' list.
         """
         if(self.results == None):
-            sr = Searcher(self.query_image_name)
+            sr = Searcher(self.path_to_index)
             results = sr.search(self.features)
             self.results = results
-            limited = results.items()[:limit]
+            limited = results[:limit]
             return limited
+        return self.results[:limit]
 
 
 if __name__ == "__main__":
-    query = Query(path_to_index= "Practical Exercise I/output/out.csv")
-    query.set_image_name(query_image_name="Practical Exercise I/ImageCLEFmed2007_test/3236.png")
+    query = Query(path_to_index= "Practical Exercise I/outresults.csv")
+    query.set_image_name(query_image_name="Practical Exercise I/ImageCLEFmed2007_test/3145.png")
     query_result = query.run()
     print("Retrieved images: ", query_result)

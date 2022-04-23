@@ -1,13 +1,17 @@
-from venv import create
-import cv2
+from cv2 import cv2
 from hand_crafted_features import hand_crafted_features
-# from ae import auto_encoder
+#from ae import auto_encoder
 import numpy as np
-import glob
+import glob,os
 import sys
-import os
+import csv
 
 def get_images_paths(image_directory, file_extensions):
+ 
+    extensions_list = []
+    for i in file_extensions:
+        extensions_list.extend(glob.glob(image_directory + '/*' + i))   
+    return extensions_list
     """
     Function to receive every path to a file with ending "file_extension" in directory "image_directory".
     Parameters
@@ -28,20 +32,18 @@ def get_images_paths(image_directory, file_extensions):
             - Add the paths to a list  (extend)
         - Return result
     """
-    
-    # for file in image_directory:
-    listOfDirectories = []
-
-    for extension in file_extensions:
-        directory = image_directory + '*' + extension
-        listOfDirectories.extend(glob.glob(directory))
-    #print(listOfDirectories)
-    return listOfDirectories
-
-
-
+    pass
 
 def create_feature_list(image_paths):
+    result=[]
+    feature_extractor = hand_crafted_features()
+    for element in image_paths:
+        image = cv2.imread(element, cv2.IMREAD_GRAYSCALE)
+        features = feature_extractor.extract(image)
+        result.append(features)
+        #print(features)
+    return result
+
     """
     Function to create features for every image in "image_paths".
     Parameters
@@ -59,19 +61,26 @@ def create_feature_list(image_paths):
         - Extract features with class "feature_extractor"
         - Add features to a list "result"
     """
-    
-    HCF = hand_crafted_features()
-    featureLists = []
-    print(image_paths)
-
-    for path in image_paths:
-        image = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-        featureLists.append(HCF.extract(image))
-
-    return featureLists
+    pass
 
 
 def write_to_file(feature_list, image_paths, output_path):
+    # f = open(output_path + 'results.csv', "w")
+    f = open(output_path + '.csv', "w",newline='')
+    with f:
+        writer = csv.writer(f)
+        j=0
+        #print(feature_list)
+        #print(feature_list[0])
+        for i in feature_list:
+            writer.writerow([str(image_paths[j])] + [str(x) for x in i])
+            j = j+1
+            # if j>100:
+            #     break
+    f.close()
+        
+
+    
     """
     Function to write features into a CSV file.
     Parameters
@@ -84,24 +93,14 @@ def write_to_file(feature_list, image_paths, output_path):
         Path to the directory where the index file will be created.
     Tasks
     -------
-        - Open file ("output_name")
+        - 
         - Iterate over all features (image wise)
         - Create a string with all features concerning one image seperated by ","
         - Write the image paths and features in one line in the file [format: image_path,feature_1,feature_2, ..., feature_n]
         - Close file eventually
-
         - Information about files http://www.tutorialspoint.com/python/file_write.htm 
     """
-
-    with open(output_path, 'w+') as file:
-
-        for image_features, image_path in zip(feature_list, image_paths): 
-            output = f'{image_path}'
-            for feature in image_features:
-                output += ',' + str(feature)
-            output += '\n'
-            file.write(output)
-    
+    pass
 
 
 def preprocessing_main(image_directory, output_path, file_extensions = (".png", ".jpg")):
@@ -114,10 +113,11 @@ def preprocessing_main(image_directory, output_path, file_extensions = (".png", 
     feature_list  = create_feature_list(image_paths)
 
     write_to_file(feature_list, image_paths, output_path)
+    print(output_path)
 
 
 if __name__ == '__main__':
     #x = get_images_paths('ImageCLEFmed2007_test/', ['.png'])
     #print(x)
-    preprocessing_main(image_directory = "ImageCLEFmed2007_test/", output_path="output/out.csv")
+    preprocessing_main(image_directory = "ImageCLEFmed2007_test/", output_path="outresults")
     # preprocessing_main(image_directory = "static/images/database/", output_path="static/")

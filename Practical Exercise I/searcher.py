@@ -1,14 +1,24 @@
 # import the necessary packages
 import csv
-from distutils.log import error
-from logging import exception
 import math
 import numpy as np
 from numpy.core import sqrt, add
 from pathlib import Path
+from numpy.linalg import norm
+import scipy.spatial #import distance
+from scipy import spatial
+#import pandas as pd
+from decimal import Decimal
+#from numpy import dot
+from numpy.linalg import norm
+
 
 
 def square_rooted(x):
+
+    
+    return round(sqrt(sum([float(a)*float(a) for a in x])),3)
+    #return np.sqrt(np.sum(x)**2)
     """
     Function to calculate the root of the sum of all squared elements of a vector (iterable).
     Parameters
@@ -19,12 +29,8 @@ def square_rooted(x):
     -------
     square rooted : float
         Root of the sum of all squared elements of 'x'.
+        
     """
-
-    sum = 0
-    for xi in x:
-        sum += xi ** 2
-    return sqrt(sum)
 
 def euclidean_distance(x, y):
     """
@@ -42,16 +48,25 @@ def euclidean_distance(x, y):
     Help
     -------
     https://pythonprogramming.net/euclidean-distance-machine-learning-tutorial/
+    
     """
 
-    sum = 0
-    for xi, yi in zip(x, y):
-        squareDiff = (xi - yi) ** 2
-        sum += squareDiff 
+    edistance = []
+    if len(x) < len(y): 
+        smaller = len(x) 
+    else:
+        smaller = len(y)
+    for i in range(smaller):
+            edistance.append(float(x[i])-float(y[i]))
 
-    return sqrt(sum)
+   
+    return square_rooted(edistance)
+
+
 
 def manhattan_distance(self, x, y):
+
+    return sum(abs(float(a)-float(b)) for a,b in zip(x,y))
     """
     Function to calculate the manhattan distance for two lists 'x' and 'y'.
     Parameters
@@ -66,12 +81,15 @@ def manhattan_distance(self, x, y):
         The manhattan distance between vectors `x` and `y`.
     """
 
-    sum = 0
-    for xi, yi in zip(x, y):
-        sum += abs(xi - yi)
-    return sum
+ 
+def nth_root(value, n_root):
+ 
+    root_value = 1/float(n_root)
+    return round (Decimal(value) ** Decimal(root_value),3)
 
 def minkowski_distance(self, x, y, p):
+
+    return nth_root(sum(pow(abs(float(a)-float(b)),p) for a,b in zip(x, y)),p)
     """
     Function to calculate the minkowski distance for two lists 'x' and 'y'.
     Parameters
@@ -87,13 +105,13 @@ def minkowski_distance(self, x, y, p):
     minkowski distance : float
         The minkowski distance between vectors `x` and `y`.
     """
-
-    sum = 0
-    for xi, yi in zip(x, y):
-        sum += abs(xi - yi) ** p
-    return sum ** (1/p)
+    pass
 
 def cosine_similarity(self, x, y):
+
+    numerator = sum(float(a)*float(b) for a,b in zip(x,y))
+    denominator = square_rooted(x)*square_rooted(y)
+    return round(numerator/float(denominator),3)
     """
     Function to calculate the cosine similarity for two lists 'x' and 'y'.
     Parameters
@@ -113,9 +131,13 @@ def cosine_similarity(self, x, y):
         - Calculate similarity
         - Change range to [0,1] rather than [-1,1]
     """
-    pass
+
+def dot(A,B): 
+    return (sum(float(a)*float(b) for a,b in zip(A,B)))
 
 def cosine_distance(self, x, y):
+    return dot(x,y) / ( (dot(x,x) **.5) * (dot(y,y) ** .5) )
+
     """
     Function to calculate the cosine distance for two lists 'x' and 'y'.
     Parameters
@@ -137,6 +159,8 @@ def cosine_distance(self, x, y):
 class Searcher:
 
     def __init__(self, path_to_index):
+        self.path_to_index=path_to_index
+
         """
         Init function of the Searcher class. Sets 'path_to_index' to the class variable 'path_to_index'.
         Parameters
@@ -144,11 +168,30 @@ class Searcher:
         x : string
             Path to the index file.
         """
-        self.path_to_index = path_to_index
+        pass
 
         
         
     def search(self, query_features):
+        if Path(self.path_to_index).exists() == False:
+            print('Incorrect or not defined Path')
+            return ("error")
+        else:
+            dic=dict()
+            distance=0.0
+            f = open(self.path_to_index) #"r")
+            with f:
+                 reader=csv.reader(f)
+                 for row in reader:
+                     key=row.pop(0)
+                     distance =euclidean_distance(row,query_features)
+                     dic[key]= distance
+            f.close()
+            sortedDict = sorted(dic.items(), key=lambda x: x[1])
+
+            
+            return sortedDict
+
         """
         Function retrieve similar images based on the queryFeatures
         Parameters
@@ -172,22 +215,4 @@ class Searcher:
             - Sort the results according their distance
             - Return limited results
         """
-        if not Path(self.path_to_index).exists():
-            print("Error")
-            return False
-        
-        distances = {}
-        
-        with open(self.path_to_index, encoding = 'UTF-8') as file:
-            data = csv.reader(file)
-            print(data)
-            for row in data:
-                filename = row[0]
-                features = []
-                for val in row[1:]:
-                    features.append(float(val))
-
-                distances.update(filename, euclidean_distance(query_features, features))
-
-        result = dict(sorted(distances.items(), key = lambda x: x[1]))
-        return result
+        pass
