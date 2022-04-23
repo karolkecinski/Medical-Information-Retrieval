@@ -93,3 +93,4 @@ if __name__ == "__main__":
     query.set_image_name(query_image_name="Practical Exercise I/ImageCLEFmed2007_test/3145.png")
     query_result = query.run()
     print("Retrieved images: ", query_result)
+    
