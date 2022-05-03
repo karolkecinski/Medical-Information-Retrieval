@@ -1,7 +1,8 @@
-
+from werkzeug.utils import secure_filename
+from fileinput import filename
 import os
 from flask import Flask, render_template, request, send_from_directory, jsonify
-#import cv2
+import cv2
 
 
 
@@ -15,7 +16,7 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 @app.route("/")
 def index():
     global selected_image
-    return render_template("start.html", selected_image= selected_image)
+    return render_template("start.html", selected_image=None)# selected_image)
 
 @app.route("/selected_image", methods=['POST'])
 def select_query_image():
@@ -25,8 +26,17 @@ def select_query_image():
     #TODO:
     # make a the directory for query images if it is not available i.e os.mkdir(directory name)
     # get the filename and store the  file in the query directory 
-       
-    return render_template("start.html", selected_image= selected_image)
+
+    if os.path.isdir(target) == False:
+        os.mkdir(target)
+
+    if request.method == 'POST':
+    
+        file = request.files['file']
+        selected_image = secure_filename(file.filename)
+        filePath = os.path.join('static', selected_image)
+        file.save(filePath)
+        return render_template("start.html", selected_image = selected_image)
 
 @app.route("/query_result", methods=['POST'])
 def start_query():
