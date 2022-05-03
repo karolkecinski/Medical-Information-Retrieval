@@ -1,0 +1,45 @@
+<!-- extend the page from main page-->
+<!-- make the whole page a block body so that the content of the page can be shown in  main_page.html-->
+<!--pass-->
+
+<div class="container" style="margin-top:10px">
+  <!-- Left info bar -->
+  <div class="row">
+    <!--ToDO:-->
+    <!--Write HTML to show a left menu with values/items (Select image, Query result,Settings)  -->
+    <!--pass-->
+
+    <div class="col-sm-9">
+      <h1 class="page-header">Input image</h1>
+      <!--ToDO:-->
+      <!--Write HTML to show the uploaded query image -->
+      <!--esle show any empty.png here -->
+      <!--pass-->
+      
+      <p>Select an image via the file picker and press upload. Afterwards you can retrieve similar images.</p>
+
+      <div class="row">
+        <div class="col">
+          
+            <form id="upload-form" action="{{ url_for('select_query_image') }}" method="POST"
+            enctype="multipart/form-data">
+            <input class="button" id="file-picker" type="file" name="file" accept="image/*" multiple>
+            <button type="submit" class="btn btn-primary" >Upload!</button>
+          </form>
+        </div>
+        <div class="col">
+          <form id="upload-form" action="#" method="POST" enctype="multipart/form-data">
+           
+             <!--ToDO:-->
+             <!--Write HTML to show a Retrieve similar button if the query image is uploaded -->
+             <!--esle disable the  Retrieve similar button -->
+             <!--pass-->
+
+            
+          </form>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
