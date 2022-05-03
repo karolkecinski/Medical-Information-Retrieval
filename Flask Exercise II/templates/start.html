@@ -12,19 +12,24 @@
     <!--Write HTML to show a left menu with values/items (Select image, Query result,Settings)  -->
     <!--pass-->
 
-    <nav class="navbar">
-      <ul class="navbar-nav">
-        <li class = "nav-item">
-          <a class="nav-link activate">Select image</a>
-        </li>
-        <li class = "nav-item">
-          <a class="nav-link disabled">Query results</a>
-        </li>
-        <li class = "nav-item">
-          <a class="nav-link" href="#">Settings</a> 
-        </li>
-      </ul>
-    </nav>
+    <div class = "col-sm-3">
+      
+      <nav class="navbar">
+        <div><h2>Overview</h2></div>
+        <br/> 
+        <ul class="navbar-nav">
+          <li class = "nav-item">
+            <a class="nav-link activate">Select image</a>
+          </li>
+          <li class = "nav-item">
+            <a class="nav-link disabled">Query results</a>
+          </li>
+          <li class = "nav-item">
+            <a class="nav-link" href="#">Settings</a> 
+          </li>
+        </ul>
+      </nav>
+    </div>
 
     <div class="col-sm-9">
       <h1 class="page-header">Input image</h1>
@@ -63,7 +68,7 @@
              <!--pass-->
 
             {% if selected_image %}
-            <button type="submit">Retrieve similar</button>
+            <button type="submit" class="btn btn-primary">Retrieve similar</button>
             {% else %}
             {% endif %}
             
