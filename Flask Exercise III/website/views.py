@@ -12,7 +12,7 @@ PACKAGE = 'website'
 ##DATA_FOLDER = f'search_engine{os.sep}data{os.sep}images{os.sep}training'
 
 ALLOWED_EXT = ['jpg', 'png']
-
+handler = Handler()
 
 @views.route("/")
 def index():
@@ -62,8 +62,10 @@ def start_query():
 
     image_name = selected_image.split('.')[0]
 
-    flash(f'Searching')
+    flash(f'Searching', 'success')
 
-    image
+    image_path = os.path.join(PACKAGE, QUERY_FOLDER, selected_image)
 
-    return render_template("query_result.html",selected_image= selected_image) 
+    query_results = handler.query(image_path)
+
+    return render_template("query_result.html", selected_image = selected_image, query_results = query_results)
