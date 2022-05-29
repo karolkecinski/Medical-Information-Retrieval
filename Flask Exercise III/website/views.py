@@ -67,7 +67,3 @@ def start_query():
     image
 
     return render_template("query_result.html",selected_image= selected_image) 
-
-
-if __name__ == "__main__":
-    app.run(port=4050, debug=True)
