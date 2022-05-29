@@ -40,7 +40,7 @@
 
 
       {% if selected_image %}
-      <img src="{{ url_for('static', filename=selected_image) }}" style="max-height: 300px; width: auto;">
+      <img src="{{ url_for('static', filename = 'uploaded/' + selected_image) }}" style="max-height: 300px; width: auto;">
       {% else %}
       <img src="static/empty.png" style="max-height: 300px; width: auto;">
       {% endif %}
@@ -52,7 +52,7 @@
       <div class="row">
         <div class="col">
           
-            <form id="upload-form" action="{{ url_for('select_query_image') }}" method="POST"
+            <form id="upload-form" action="{{ url_for('views.select_query_image') }}" method="POST"
             enctype="multipart/form-data">
             <input class="button" id="file-picker" type="file" name="file" accept="image/*" multiple>
             <button type="submit" class="btn btn-primary" >Upload!</button>
