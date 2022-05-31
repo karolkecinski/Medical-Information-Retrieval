@@ -69,4 +69,6 @@ def start_query():
 
     query_results = handler.query(image_path)
 
+    print(query_results, flush=True)
+
     return render_template("query_result.html", selected_image = selected_image, query_results = query_results)

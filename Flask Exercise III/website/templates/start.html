@@ -59,7 +59,8 @@
           </form>
         </div>
         <div class="col">
-          <form id="upload-form" action="#" method="POST" enctype="multipart/form-data">
+          <form id="upload-form" action="{{ url_for('views.start_query') }}" method="POST" 
+          enctype="multipart/form-data">
            
              <!--ToDO: DONE-->
              <!--Write HTML to show a Retrieve similar button if the query image is uploaded -->
