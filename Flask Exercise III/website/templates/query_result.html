@@ -22,12 +22,12 @@
       <hr class="d-sm-none">
     </div>
 
-    <div class="col-sm-9">
+    <div class="col-sm-8">
       <h1 class="page-header" style="text-align: left;">Input image</h1>
       <div class="row">
         <div class = "col" style="width: 50%; text-align: left;">
           <img src="{{ url_for('static', filename = 'uploaded/' + selected_image) }}"
-          style="max-height: 250px; 
+          style="max-height: 220px; 
           width: auto"
           alt="">
         </div>
@@ -39,7 +39,7 @@
         {% for image in query_results %}
           <div class="row">
             <div class="col" style="width: 50%; text-align: left;">
-              <img src="{{url_for('static', filename=image[0])}}" style="max-height: 250px; width: auto; display: block;"
+              <img src="{{url_for('static', filename=image[0])}}" style="max-height: 220px; width: auto; display: block;"
                 onclick="click_on_image(this)">
             </div>
             <div class="col" style="text-align: left; background-color: green;">
@@ -51,6 +51,15 @@
       
       <div style="height: 50px"></div>
     </div>
+
+    <div class = "col-sm-2">
+      <form id = "Relevance_feedback" action = "{{ url_for('views.modified_query') }}" method="POST"
+      enctype="multipart/form-data">
+      <button type="submit" class="btn btn-primary" style="margin-top: 210px">Relevance feedback</button>
+
+      <!-- TODO: Get relevant and irrelevant images -->
+    </div>
+
   </div>
 </div>
 </body>

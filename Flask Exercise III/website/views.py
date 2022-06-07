@@ -72,3 +72,23 @@ def start_query():
     print(query_results, flush=True)
 
     return render_template("query_result.html", selected_image = selected_image, query_results = query_results)
+
+@views.route("/modified_result", methods=['POST', 'GET'])
+def modified_query():
+    global selected_image
+    global query_results
+
+    if request.method == 'GET':
+        if query_results:
+            return render_template("query_result.html", selected_image = selected_image, query_results = query_results)
+        else:
+            return redirect('/')
+
+    ### TODO: retrieve images for modified query
+
+    # image_name = selected_image.split('.')[0]
+    # flash(f'Searching', 'success')
+    # image_path = os.path.join(PACKAGE, QUERY_FOLDER, selected_image)
+    # query_results = handler.query(image_path)
+    # print(query_results, flush=True)
+    # return render_template("query_result.html", selected_image = selected_image, query_results = query_results)
