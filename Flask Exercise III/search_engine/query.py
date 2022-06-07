@@ -90,7 +90,7 @@ class Query:
 
         return self.results[:limit]
 
-    def relevance_feedback(self, selected_images, not_selected_images, limit):
+    def relevance_feedback(self, selected_images, not_selected_images, limit) -> list:
         """
         Function to start a relevance feedback query.
         Parameters
@@ -107,10 +107,18 @@ class Query:
             List with the 'limit' first elements of the 'results' list. 
         """
 
-        pass
+        if(self.results == None):
+            return self.run()
+        else:
+            sr = Searcher(self.path_to_index)
+            relevant          = self.get_feature_vector(selected_images)
+            non_relevant      = self.get_feature_vector(not_selected_images)
+            modified_features = rocchio(self.features, relevant, non_relevant)
+            results           = sr.search(modified_features) 
+            self.results      = results
+            return results[:limit]
 
-    @staticmethod
-    def get_feature_vector(self, image_names):
+    def get_feature_vector(self, image_names) -> list:
         """
         Function to get features from 'index' file for given image names.
         Parameters
@@ -122,9 +130,18 @@ class Query:
         - features : list
             List with of features.
         """
-        pass
+        features = []
+
+        with open(self.path_to_index) as file:
+            data = csv.reader(file)
+            list_of_features = {row[0] : row[1:] for row in data}
+
+            for image in image_names:
+                features.append(list_of_features.get(image))
+
+            return features
     
-def rocchio(original_query, relevant, non_relevant, a = 1, b = 0.8, c = 0.1):
+def rocchio(original_query, relevant, non_relevant, a = 1, b = 0.8, c = 0.1) -> list:
     """
     Function to adapt features with rocchio approach.
 
@@ -147,14 +164,12 @@ def rocchio(original_query, relevant, non_relevant, a = 1, b = 0.8, c = 0.1):
     - features : list
         List with of features.
     """
-    
-    related_vectors     = [Query.get_feature_vector(relevant[i])        for i in range(len(relevant))]
-    non_related_vectors = [Query.get_feature_vector(non_relevant[i])    for i in range(len(non_relevant))]
-
 
     modified_query =  a * original_query
-    modified_query += b * 1 / len(relevant)     * np.sum(related_vectors, axis = 0)
-    modified_query -= c * 1 / len(non_relevant) * np.sum(non_related_vectors, axis = 0)
+    modified_query += b * 1 / len(relevant)     * np.sum(relevant, axis = 0)
+    modified_query -= c * 1 / len(non_relevant) * np.sum(non_relevant, axis = 0)
+
+    return modified_query
 
 
 if __name__ == "__main__":
