@@ -90,6 +90,72 @@ class Query:
 
         return self.results[:limit]
 
+    def relevance_feedback(self, selected_images, not_selected_images, limit):
+        """
+        Function to start a relevance feedback query.
+        Parameters
+        ----------
+        selected_images : list
+            List of selected images.
+        not_selected_images : list
+            List of not selected images.
+        limit : int
+            Amount of results that will be retrieved. Default: 10.
+        Returns
+        -------
+        - results : list
+            List with the 'limit' first elements of the 'results' list. 
+        """
+
+        pass
+
+    @staticmethod
+    def get_feature_vector(self, image_names):
+        """
+        Function to get features from 'index' file for given image names.
+        Parameters
+        ----------
+        image_names : list
+            List of images names.
+        Returns
+        -------
+        - features : list
+            List with of features.
+        """
+        pass
+    
+def rocchio(original_query, relevant, non_relevant, a = 1, b = 0.8, c = 0.1):
+    """
+    Function to adapt features with rocchio approach.
+
+    Parameters
+    ----------
+    original_query : list
+        Features of the original query.
+    relevant : list
+        Features of the relevant images.
+    non_relevant : list
+        Features of the non relevant images.
+    a : int
+        Rocchio parameter.
+    b : int
+        Rocchio parameter.
+    c : int
+        Rocchio parameter.
+    Returns
+    -------
+    - features : list
+        List with of features.
+    """
+    
+    related_vectors     = [Query.get_feature_vector(relevant[i])        for i in range(len(relevant))]
+    non_related_vectors = [Query.get_feature_vector(non_relevant[i])    for i in range(len(non_relevant))]
+
+
+    modified_query =  a * original_query
+    modified_query += b * 1 / len(relevant)     * np.sum(related_vectors, axis = 0)
+    modified_query -= c * 1 / len(non_relevant) * np.sum(non_related_vectors, axis = 0)
+
 
 if __name__ == "__main__":
     query = Query(path_to_index= "search_engine/output/out.csv")
