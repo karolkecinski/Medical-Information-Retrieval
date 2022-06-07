@@ -27,7 +27,7 @@
       <div class="row">
         <div class = "col" style="width: 50%; text-align: left;">
           <img src="{{ url_for('static', filename = 'uploaded/' + selected_image) }}"
-          style="max-height: 300px; 
+          style="max-height: 250px; 
           width: auto"
           alt="">
         </div>
@@ -39,7 +39,7 @@
         {% for image in query_results %}
           <div class="row">
             <div class="col" style="width: 50%; text-align: left;">
-              <img src="{{url_for('static', filename=image[0])}}" style="max-height: 300px; width: auto; display: block;"
+              <img src="{{url_for('static', filename=image[0])}}" style="max-height: 250px; width: auto; display: block;"
                 onclick="click_on_image(this)">
             </div>
             <div class="col" style="text-align: left; background-color: green;">
@@ -50,8 +50,6 @@
         {% endfor %}
       
       <div style="height: 50px"></div>
-    </div>
-    
     </div>
   </div>
 </div>
