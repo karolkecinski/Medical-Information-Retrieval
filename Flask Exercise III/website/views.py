@@ -3,6 +3,7 @@ from flask import request, flash, redirect, Blueprint, render_template
 import os
 from werkzeug.utils import secure_filename
 from search_engine.handler import Handler
+import search_engine.query as SEQ
 
 views = Blueprint('views', __name__)
 
@@ -14,6 +15,8 @@ PACKAGE = 'website'
 ALLOWED_EXT = ['jpg', 'png']
 handler = Handler()
 selected_image = ""
+selected_images = []
+not_selected_images = []
 
 @views.route("/")
 def index():
@@ -75,20 +78,24 @@ def start_query():
 
 @views.route("/modified_result", methods=['POST', 'GET'])
 def modified_query():
-    global selected_image
-    global query_results
+    print("OOOOOOYYYYYYYYYYYOOOOOOOOO")
 
+    global selected_images
+    global not_selected_images
+
+    print(selected_images)
     if request.method == 'GET':
-        if query_results:
-            return render_template("query_result.html", selected_image = selected_image, query_results = query_results)
-        else:
-            return redirect('/')
+        return redirect('/')
 
+    print(not_selected_images)
     ### TODO: retrieve images for modified query
+
+    query_results = handler.relevance_feedback(selected_images, not_selected_images) #SEQ.Query().relevance_feedback(selected_images, not_selected_images)
+    print("CCCCCCCCCCCCCCCCCCCCCCCCC")
 
     # image_name = selected_image.split('.')[0]
     # flash(f'Searching', 'success')
     # image_path = os.path.join(PACKAGE, QUERY_FOLDER, selected_image)
     # query_results = handler.query(image_path)
-    # print(query_results, flush=True)
-    # return render_template("query_result.html", selected_image = selected_image, query_results = query_results)
+    print(query_results, flush=True)
+    return render_template("query_result.html", selected_image = selected_image, query_results = query_results)

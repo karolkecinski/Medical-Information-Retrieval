@@ -90,7 +90,7 @@ class Query:
 
         return self.results[:limit]
 
-    def relevance_feedback(self, selected_images, not_selected_images, limit) -> list:
+    def relevance_feedback(self, selected_images, not_selected_images, limit = 10) -> list:
         """
         Function to start a relevance feedback query.
         Parameters
@@ -108,8 +108,6 @@ class Query:
         """
 
         if(self.results == None):
-            return self.run()
-        else:
             sr = Searcher(self.path_to_index)
             relevant          = self.get_feature_vector(selected_images)
             non_relevant      = self.get_feature_vector(not_selected_images)

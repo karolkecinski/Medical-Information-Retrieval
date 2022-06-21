@@ -1,4 +1,4 @@
-from re import T
+from typing_extensions import Self
 from search_engine.irma_code import IRMA
 from search_engine.query import Query
 import os
@@ -38,6 +38,9 @@ class Handler:
             tmp.append((image, self._irma.decode_as_dict(code)))
 
         self.results = tmp
+
+    def relevance_feedback(selected_images, not_selected_images):
+        self._query.relevance_feedback(selected_images, not_selected_images)
 
     @staticmethod
     def _image_name(image_path : str) -> str:
