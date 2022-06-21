@@ -109,13 +109,11 @@
       alert(JSON.stringify(response))
       console.log("r1", response);
       if(!response.ok) {
-        alert("!response.ok");
         throw Error(response.statusText);
       }
       alert(JSON.stringify(response));
       return response
     })
-    .then(() => { alert("Working"); })
     .then(function(response){console.log("r2", response);window.location.href='/modified_result';})
 
     // fetch('/modified_result', {

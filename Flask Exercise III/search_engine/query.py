@@ -7,6 +7,8 @@ import csv
 import numpy as np
 import os
 
+from website.views import modified_query
+
 INDEX = f"search_engine{os.sep}output{os.sep}out.csv"
 
 class Query:
@@ -107,14 +109,13 @@ class Query:
             List with the 'limit' first elements of the 'results' list. 
         """
 
-        if(self.results == None):
-            sr = Searcher(self.path_to_index)
-            relevant          = self.get_feature_vector(selected_images)
-            non_relevant      = self.get_feature_vector(not_selected_images)
-            modified_features = rocchio(self.features, relevant, non_relevant)
-            results           = sr.search(modified_features) 
-            self.results      = results
-            return results[:limit]
+        sr = Searcher(self.path_to_index)
+        relevant          = self.get_feature_vector(selected_images)
+        non_relevant      = self.get_feature_vector(not_selected_images)
+        modified_features = rocchio(self.features, relevant, non_relevant)
+        results           = sr.search(modified_features) 
+        self.results      = results
+        return results[:limit]
 
     def get_feature_vector(self, image_names) -> list:
         """
@@ -162,10 +163,36 @@ def rocchio(original_query, relevant, non_relevant, a = 1, b = 0.8, c = 0.1) -> 
     - features : list
         List with of features.
     """
+    Vo  = []
+    Vr  = []
+    Vnr = []
+    modified_query = []
 
-    modified_query =  a * original_query
-    modified_query += b * 1 / len(relevant)     * np.sum(relevant, axis = 0)
-    modified_query -= c * 1 / len(non_relevant) * np.sum(non_relevant, axis = 0)
+    for number in original_query:
+        Vo.append(a * number)
+
+    for Dj in relevant:
+        if not Vr:
+            Vr = Dj
+        else:
+            for i in range(len(Dj)):
+                Vr[i] += Dj[i]
+
+    for i in range(len(Vr)):
+        Vr[i] = Vr[i] * b / len(relevant)
+
+    for Dk in non_relevant:
+        if not Vnr:
+            Vnr = Dk
+        else:
+            for i in range(len(Dk)):
+                Vnr[i] += Vnr[i]
+
+    for i in range(len(Vnr)):
+        Vnr[i] = Vnr[i] * b / len(relevant)
+
+    for i in range(len(Vo)):
+        modified_query.append(Vo[i] + Vr[i] - Vnr[i])
 
     return modified_query
 

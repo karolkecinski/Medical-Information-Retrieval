@@ -39,7 +39,7 @@ class Handler:
 
         self.results = tmp
 
-    def relevance_feedback(self, selected_images, not_selected_images) -> None:
+    def relevance_feedback(self, selected_images, not_selected_images):
         return self._query.relevance_feedback(selected_images, not_selected_images)
 
     @staticmethod

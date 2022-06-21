@@ -30,6 +30,7 @@ def select_query_image():
         return index()
 
     global selected_image
+    global handler
     target = os.path.join(APP_ROOT, QUERY_FOLDER)
 
     if os.path.isdir(target) == False:
@@ -57,6 +58,7 @@ def select_query_image():
 def start_query():
     global selected_image
     global query_results
+    global handler
 
     if request.method == 'GET':
         if query_results:
@@ -78,6 +80,8 @@ def start_query():
 
 @views.route("/modified_result", methods=['POST', 'GET'])
 def modified_query():
+    global handler
+
     json_data = json.loads(request.get_data())
     selected_images = json_data["selected_images"]
     not_selected_images = json_data["not_selected_images"]
@@ -88,7 +92,10 @@ def modified_query():
     print(not_selected_images)
     ### TODO: retrieve images for modified query
 
+    print("Query")
+
     query_results = handler.relevance_feedback(selected_images, not_selected_images) #SEQ.Query().relevance_feedback(selected_images, not_selected_images)
+    print("Results:")
 
     # image_name = selected_image.split('.')[0]
     # flash(f'Searching', 'success')
