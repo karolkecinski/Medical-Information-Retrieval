@@ -97,8 +97,6 @@
       "not_selected_images": not_selected_images
     };
 
-    alert(JSON.stringify(body))
-
     fetch('/modified_result', {
       method: 'POST',
       headers: {
@@ -106,12 +104,10 @@
       },
       body: JSON.stringify(body)
       }).then(function(response) {
-      alert(JSON.stringify(response))
       console.log("r1", response);
       if(!response.ok) {
         throw Error(response.statusText);
       }
-      alert(JSON.stringify(response));
       return response
     })
     .then(function(response){console.log("r2", response);window.location.href='/modified_result';})

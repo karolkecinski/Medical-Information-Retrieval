@@ -7,8 +7,6 @@ import csv
 import numpy as np
 import os
 
-from website.views import modified_query
-
 INDEX = f"search_engine{os.sep}output{os.sep}out.csv"
 
 class Query:
@@ -108,7 +106,7 @@ class Query:
         - results : list
             List with the 'limit' first elements of the 'results' list. 
         """
-
+        
         sr = Searcher(self.path_to_index)
         relevant          = self.get_feature_vector(selected_images)
         non_relevant      = self.get_feature_vector(not_selected_images)
@@ -135,8 +133,11 @@ class Query:
             data = csv.reader(file)
             list_of_features = {row[0] : row[1:] for row in data}
 
-            for image in image_names:
-                features.append(list_of_features.get(image))
+            for image in image_names: 
+                values = list_of_features.get("website\\static\\images\\"+image) 
+                for i in range(len(values)):
+                    values[i] = float(values[i])          
+                features.append(values)
 
             return features
     

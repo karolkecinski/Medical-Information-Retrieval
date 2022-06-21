@@ -83,8 +83,8 @@ def modified_query():
     global handler
 
     json_data = json.loads(request.get_data())
-    selected_images = json_data["selected_images"]
-    not_selected_images = json_data["not_selected_images"]
+    selected_images = [_ for _ in json_data["selected_images"].split(';')][:-1]
+    not_selected_images = [_ for _ in json_data["not_selected_images"].split(';')][:-1]
 
     if request.method == 'GET':
         return redirect('/')
@@ -101,5 +101,6 @@ def modified_query():
     # flash(f'Searching', 'success')
     # image_path = os.path.join(PACKAGE, QUERY_FOLDER, selected_image)
     # query_results = handler.query(image_path)
-    print(query_results, flush=True)
+    query_results = [("images/" + Q[0].split("\\")[3], Q[1]) for Q in query_results]
+    print(query_results)
     return render_template("query_result.html", selected_image = selected_image, query_results = query_results)
