@@ -97,6 +97,8 @@
       "not_selected_images": not_selected_images
     };
 
+    alert(JSON.stringify(body))
+
     fetch('/modified_result', {
       method: 'POST',
       headers: {

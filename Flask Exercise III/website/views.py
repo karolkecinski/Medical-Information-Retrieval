@@ -3,7 +3,7 @@ from flask import request, flash, redirect, Blueprint, render_template
 import os
 from werkzeug.utils import secure_filename
 from search_engine.handler import Handler
-import search_engine.query as SEQ
+import json
 
 views = Blueprint('views', __name__)
 
@@ -78,12 +78,10 @@ def start_query():
 
 @views.route("/modified_result", methods=['POST', 'GET'])
 def modified_query():
-    print("OOOOOOYYYYYYYYYYYOOOOOOOOO")
+    json_data = json.loads(request.get_data())
+    selected_images = json_data["selected_images"]
+    not_selected_images = json_data["not_selected_images"]
 
-    global selected_images
-    global not_selected_images
-
-    print(selected_images)
     if request.method == 'GET':
         return redirect('/')
 
@@ -91,7 +89,6 @@ def modified_query():
     ### TODO: retrieve images for modified query
 
     query_results = handler.relevance_feedback(selected_images, not_selected_images) #SEQ.Query().relevance_feedback(selected_images, not_selected_images)
-    print("CCCCCCCCCCCCCCCCCCCCCCCCC")
 
     # image_name = selected_image.split('.')[0]
     # flash(f'Searching', 'success')
