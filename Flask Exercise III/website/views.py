@@ -81,26 +81,25 @@ def start_query():
 @views.route("/modified_result", methods=['POST', 'GET'])
 def modified_query():
     global handler
+    global query_results
 
-    json_data = json.loads(request.get_data())
-    selected_images = [_ for _ in json_data["selected_images"].split(';')][:-1]
-    not_selected_images = [_ for _ in json_data["not_selected_images"].split(';')][:-1]
+    if request.method == 'POST':
+        
+        json_data = json.loads(request.get_data())
+        selected_images = [_ for _ in json_data["selected_images"].split(';')][:-1]
+        not_selected_images = [_ for _ in json_data["not_selected_images"].split(';')][:-1]
 
-    if request.method == 'GET':
-        return redirect('/')
+        print("printing not selected items:")
+        print(not_selected_images)
 
-    print(not_selected_images)
-    ### TODO: retrieve images for modified query
+        print("Query")
 
-    print("Query")
+        query_results = handler.relevance_feedback(selected_images, not_selected_images) #SEQ.Query().relevance_feedback(selected_images, not_selected_images)
+        print("Results:")
 
-    query_results = handler.relevance_feedback(selected_images, not_selected_images) #SEQ.Query().relevance_feedback(selected_images, not_selected_images)
-    print("Results:")
+        query_results = [("images/" + Q[0].split("\\")[3], Q[1]) for Q in query_results]
+        print(query_results)
 
-    # image_name = selected_image.split('.')[0]
-    # flash(f'Searching', 'success')
-    # image_path = os.path.join(PACKAGE, QUERY_FOLDER, selected_image)
-    # query_results = handler.query(image_path)
-    query_results = [("images/" + Q[0].split("\\")[3], Q[1]) for Q in query_results]
-    print(query_results)
+        return 'response',200
+
     return render_template("query_result.html", selected_image = selected_image, query_results = query_results)
